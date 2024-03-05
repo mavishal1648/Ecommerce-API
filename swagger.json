@@ -1,0 +1,402 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "description": "Api for Ecommerce Application",
+    "title": "Ecommerce Api"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3200"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "JWT": {
+        "in": "header",
+        "name": "authorization",
+        "type": "apiKey"
+      }
+    }
+  },
+  "paths": {
+    "/api/products": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get Products",
+        "description": "User will get all products",
+        "security": [
+          {
+            "JWT": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/signin": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login",
+        "description": "User login to get token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "400": {
+            "description": "Incorrect Credentials"
+          }
+        }
+      }
+    },
+    "/api/products/filter": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Filter Products",
+        "description": "User will get the filtered products",
+        "security": [
+          {
+            "JWT": {}
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "minPrice",
+            "description": "minPrice filter",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "maxPrice",
+            "description": "maxPrice filter",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "Category",
+            "description": "category filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/products/one-product/{id}": {
+      "get": {
+        "tags": ["products"],
+        "summary": "Get One Product",
+        "description": "Retrieve information about a single product by its ID.",
+        "security": [
+          {
+            "JWT": {}
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "ID of the product to retrieve",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product Not Found"
+          }
+        }
+      }
+    },
+    "/api/products/rate": {
+      "post": {
+        "tags": ["products"],
+        "summary": "Rate Product",
+        "description": "Rate a product by a user.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userId",
+            "description": "ID of the user who is rating the product",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "productId",
+            "description": "ID of the product being rated",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "rating",
+            "description": "Rating given by the user",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rating has been added"
+          }
+        }
+      }
+    },
+    "/api/users/getuser": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get Users",
+        "description": "Get all users",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/signup": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Sign Up",
+        "description": "Create a new user account.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignUp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/carts": {
+      "get": {
+        "tags": ["Cart"],
+        "summary": "Get Cart Items",
+        "description": "Retrieve items in the user's cart.",
+        "security": [
+          {
+            "JWT": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+      "/api/carts/": {
+          "post": {
+              "tags": ["Cart"],
+              "summary": "Add Item to Cart",
+              "description": "Add an item to the user's cart.",
+              "security": [
+                {
+                  "JWT": {}
+                }
+              ],
+              "parameters": [
+                  {
+                      "in": "query",
+                      "name": "productId",
+                      "description": "ID of the product to add to the cart",
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "required": true
+                  },
+                  {
+                      "in": "query",
+                      "name": "quantity",
+                      "description": "Quantity of the product to add to the cart",
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "required": true
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Successful operation",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "res": {
+                                          "type": "object"
+                                      },
+                                      "msg": {
+                                          "type": "string"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Bad request, invalid parameters",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "object"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+        "/api/carts/{id}": {
+            "delete": {
+                "tags": ["Cart"],
+                "summary": "Delete Cart Item",
+                "description": "Delete a cart item by its ID.",
+                "security": [
+                  {
+                    "JWT": {}
+                  }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "ID of the cart item to delete",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+  }
+}

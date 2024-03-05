@@ -1,0 +1,15 @@
+ProductController
+
+1. get Products ---Done
+2. add Product ---Done
+3. get one Product ---Done
+4.Filter Product ---Done
+
+5. Rate Products ---Done
+6. Add product to cart ---Done
+7. Get items of cart ---Done
+8. Remove items from cart ---Done
+
+
+user---sign up (email,name,password,typeOfUser(seller,customer));----Done
+user----sign in(email,name);----Done
