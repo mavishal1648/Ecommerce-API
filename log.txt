@@ -1,0 +1,5 @@
+{"level":"info","message":"/api/users/signup-mavishal1648@gmail.com","service":"request-logging"}
+{"level":"info","message":"/api/users/signup-mavishal1648@gmail.com","service":"request-logging"}
+{"level":"info","message":"/api/users/signup-aniket123@gmail.com","service":"request-logging"}
+{"level":"info","message":"/api/users/signup-aniket123@gmail.com","service":"request-logging"}
+{"level":"info","message":"/api/users/signup-prernaUbana@gmail.com","service":"request-logging"}
