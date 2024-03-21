@@ -1,40 +1,42 @@
+import applicationError from "../error-handler/applicationError.js";
 import cartModel from "./cart.model.js";
-export default class cartController{
-    add(req,res){
-        const {productId,quantity} = req.query;
-        const userId = req.userId;
-        const cart = cartModel.addItems(productId,userId,quantity);
-        if(!cart.status){
-            return res.status(400).send(cart)
-        }
-        else{
-            res.status(200).json({
-                res:cart,
-                msg:"cart item added successfully"
-            })
-        }
+import cartRepository from "./cart.repository.js";
+export default class cartController {
+  constructor() {
+    this.cartRepository = new cartRepository();
+  }
+  async add(req, res) {
+    try {
+      const { productId, quantity } = req.body;
+      const userId = req.userId;
+      await this.cartRepository.add(productId, userId, quantity);
+      res.status(201).send("Cart added successfully");
+    } catch (e) {
+      console.log(e);
+      res.status(400).send("Cart not added!");
     }
-    get(req,res){
+  }
+  async get(req, res) {
+    try{
         const userId = req.userId;
-        const items = cartModel.get(userId);
-         return res.status(200).send(items);
-    }
+        const items = await this.cartRepository.get(userId);
+          return res.status(200).send(items);
+    }catch (e) {
+        console.log(e);
+        res.status(400).send("couldnt get the cart items");
+      }
+    
+  }
 
-    delete(req,res){
+  async delete(req, res) {
+    try{
         const userId = req.userId;
-        const cartId = req.params.id;  
-        const error = cartModel.delete(cartId,userId);
-        if(error){
-            res.status(400).json({
-                status:false,
-                msg:'Id not found!'
-            })
-        }
-        else{
-            res.status(200).json({
-                status:true,
-                msg:'cardItem deleted!'
-            })
-        }
+    const cartItemId = req.params.id;
+    await this.cartRepository.delete(cartItemId,userId);
+    res.status(200).send('Cart Items Deleted');
+    }catch(e){
+        console.log(e);
+        res.status(400).send("couldnt delete the cart items");
     }
+  }
 }
