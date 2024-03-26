@@ -1,0 +1,13 @@
+Place Order.
+
+
+1. get cart items of user,calculate total amount
+2. Create a record for order.
+3. Reduce the stock(products Quantity).
+4. Clear the Cart.
+
+
+
+5. Deduct the payment. 
+6. Inform about the orders to sellers.
+7. Inform to Courier.

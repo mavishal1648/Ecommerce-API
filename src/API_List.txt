@@ -13,3 +13,34 @@ ProductController
 
 user---sign up (email,name,password,typeOfUser(seller,customer));----Done
 user----sign in(email,name);----Done
+
+
+db.products.aggregate([
+    {
+        $unwind:"$ratings"
+    },
+    {
+        $group:{
+            _id:"$name",
+            averageRating:{$sum:"$ratings.rating"}
+        }
+    }
+])
+
+db.products.aggregate([
+    {
+        $project:{
+            name:1,
+            countOfRating:{
+                $cond:{if:{$isArray:"$ratings"},then:{$size:"$ratings"},else:0}
+            }
+        }
+    },
+    {
+        $sort:{countOfRating:-1}
+    },
+    {
+        $limit:3
+    }
+
+])

@@ -105,4 +105,16 @@ export default class productController {
       );
     }
   }
+  async averageRating(req,res,next){
+    try{
+       const result =  await this.productRepository.averageRating();
+       res.status(200).send(result);
+    }catch(e){
+      console.log(e);
+      throw new applicationError(
+        "something went wrong with averageRating product!",
+        500
+      );
+    }
+  }
 }

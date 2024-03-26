@@ -8,15 +8,12 @@ class cartRepository{
         try{
             const db = getDB();
             const collection = db.collection("cart");
-            const id = await this.getNextCounter(db);
-            console.log(id);
             //find the document
             //either insert or update
             //insertion
             // upsert true will first check if it finds the document if find it updates or else it creates a new document
              await collection.updateOne (
                 {productId:new ObjectId(productId),userId:new ObjectId(userId)},{
-                    $setOnInsert:{_id:id},
                     $inc:{quantity:quantity}
                 },
                 {upsert:true}
@@ -49,15 +46,6 @@ class cartRepository{
         }
     }
 
-    async getNextCounter(db){
-        const resultDocument = await db.collection("counters").findOneAndUpdate(
-            {_id:'cartItemId'},
-            {$inc:{value: 1}},
-            {returnDocument:'after'}
-        );
-        console.log(resultDocument);
-        console.log(resultDocument.value);
-        return resultDocument.value;
-    }
+    
 }
 export default cartRepository;

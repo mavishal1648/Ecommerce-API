@@ -13,7 +13,9 @@ import applicationError from "./src/features/error-handler/applicationError.js";
 import productRouter from "./src/features/product/products.routes.js";
 import userRouter from "./src/features/user/user.routes.js";
 import cartRouter from "./src/features/cart/cart.routes.js";
+import orderRouter from './src/features/order/order.router.js';
 import {connectToMongoDB} from "./src/config/mongodb.js";
+import { connectUsingMongoose } from './src/config/mongoose.js';
 
 const server = express();
 
@@ -34,7 +36,7 @@ server.use(loggerMiddleware);
 server.use("/api/products",jwtAuth,productRouter);
 server.use("/api/users",userRouter);
 server.use('/api/carts',jwtAuth,cartRouter);
-
+server.use('/api/orders',jwtAuth,orderRouter)
 server.get('/',(req,res)=>{
     res.send('Welcome to Ecommerce APIs');
 })
@@ -54,5 +56,6 @@ server.use((err,req,res,next)=>{
 
 server.listen(3200,()=>{
     console.log('Server is listening to port 3200');
-    connectToMongoDB();
+    // connectToMongoDB();
+    connectUsingMongoose()
 });

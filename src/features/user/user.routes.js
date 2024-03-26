@@ -7,7 +7,9 @@ const userRouter = express.Router();
 
 const userController = new UserController();
 
-userRouter.get('/getuser',userController.getUser);
+userRouter.get('/getuser',(req,res)=>{
+    userController.getUser(req,res);
+});
 userRouter.post('/signup', (req,res)=>{
     userController.signUp(req,res);
 });

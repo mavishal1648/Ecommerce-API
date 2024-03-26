@@ -27,5 +27,15 @@ class userRepository {
       throw new applicationError("Something went wrong with database!", 500);
     }
   }
+  async getAll() {
+    try {
+      const db = getDB();
+      const collection = db.collection("users");
+      return await collection.find().toArray();
+    } catch (e) {
+      console.log(e);
+      throw new applicationError("Something went wrong with database!", 500);
+    }
+  }
 }
 export default userRepository;

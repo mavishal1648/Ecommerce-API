@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../../config/mongodb.js";
 import applicationError from "../error-handler/applicationError.js";
-import e from "express";
+
 
 class productRepository {
   async add(newProduct) {
@@ -130,6 +130,38 @@ class productRepository {
             averagePrice:{$avg:"$price"}
           }
         }
+      ]).toArray();
+    }catch(e){
+      console.log(e);
+      throw new applicationError("Something went wrong with database!", 500);
+    }
+  }
+  async averageRating(){
+    try{
+      const db = getDB();
+      const collection = db.collection("products");
+      return await collection.aggregate([
+        {
+          $unwind:"$ratings"
+        },
+        {
+          $addFields:{
+            "ratings.rating":{$toDouble:"$ratings.rating"}
+          }
+        },
+        {
+          $group:{
+              _id:"$name",
+              averageRating:{$avg:"$ratings.rating"}
+          }
+        },
+        {
+          $sort:{averageRating:-1}
+        },
+        {
+          $limit:2
+        }
+
       ]).toArray();
     }catch(e){
       console.log(e);

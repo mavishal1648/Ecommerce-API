@@ -16,8 +16,11 @@ productRouter.get('/',(req,res)=>{
 productRouter.post('/',upload.single('imageUrl'),(req,res)=>{
     productControllers.addProduct(req,res);
 });
-productRouter.get('/averagePrice',(req,res)=>{
+productRouter.get('/average-price',(req,res)=>{
     productControllers.averagePrice(req,res); 
+}); 
+productRouter.get('/average-rating',(req,res)=>{
+    productControllers.averageRating(req,res); 
 }); 
 productRouter.post('/rate',(req,res)=>{
     productControllers.rateProduct(req,res);

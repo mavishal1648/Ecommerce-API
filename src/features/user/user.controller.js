@@ -26,6 +26,7 @@ export default class UserController {
   async signIn(req, res) {
     try {
       const user = await this.userRepository.findByEmail(req.body.email);
+      console.log(user);
       if (!user) {
         return res.status(400).send("Incorrect Credentials");
       } else {
@@ -52,9 +53,15 @@ export default class UserController {
       return res.status(500).send("something went wrong!");
     }
   }
-  getUser(req, res) {
-    const users = UserModel.getAll();
-    console.log(users);
-    return res.status(200).send(users);
+  async getUser(req, res) {
+    try{
+      const users = await this.userRepository.getAll();
+      console.log(users);
+      return res.status(200).send(users);
+    }catch (e) {
+      console.log(e);
+      return res.status(500).send("something went wrong!");
+    }
+   
   }
 }
